@@ -2,150 +2,149 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TRILING MELAYA - 6 หมวดหมู่ฉบับสมบูรณ์</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TRILING MELAYA - Cross-Platform Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;700&family=Noto+Sans+Arabic:wght@400;600;700&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #0f172a;
             --accent: #2563eb;
-            --success: #059669;
         }
         body {
             font-family: 'Poppins', 'Noto Sans Thai', sans-serif;
             background: #f8fafc;
             color: #1e293b;
-            user-select: none;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
+        
+        /* Typography สำหรับ Jawi ที่รองรับทุกขนาดหน้าจอ */
         .yawi-text {
             font-family: 'Noto Sans Arabic', serif;
             direction: rtl;
-            font-size: 4.8rem;
-            line-height: 1.8;
+            font-size: clamp(2.5rem, 8vw, 4.5rem); /* ปรับขนาดอัตโนมัติตามหน้าจอ */
+            line-height: 1.6;
             text-align: center;
             font-weight: 600;
-            font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
-            word-spacing: 0.15em;
         }
-        .thai-font { font-family: 'Noto Sans Thai', sans-serif; }
-        
-        .card-infinite {
+
+        .card-category {
             background: white;
-            border-radius: 2.5rem;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 2rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            touch-action: manipulation;
         }
-        .card-infinite:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
-            border-color: var(--accent);
+        .card-category:active {
+            transform: scale(0.95);
+            background: #f1f5f9;
         }
-        .progress-bar { transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
-        
+        @media (min-width: 1024px) {
+            .card-category:hover {
+                transform: translateY(-8px);
+                border-color: var(--accent);
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            }
+        }
+
         .btn-choice {
+            touch-action: manipulation;
             transition: all 0.2s ease;
-            border: 2px solid #f1f5f9;
         }
-        .btn-choice:hover {
-            background: #eff6ff;
-            border-color: var(--accent);
-            transform: scale(1.02);
+        .btn-choice:active {
+            transform: scale(0.98);
+            background: #dbeafe;
         }
-        .level-badge {
-            background: linear-gradient(135deg, #1e3a8a, #2563eb);
-            color: white;
-            padding: 0.4rem 1.2rem;
-            border-radius: 999px;
-            font-weight: 800;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-        }
+
+        /* ซ่อน Scrollbar */
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+
+        /* การตั้งค่าสำหรับ Mobile Keyboard */
+        input:focus { font-size: 16px !important; } /* ป้องกัน iOS Auto-zoom */
     </style>
 </head>
-<body class="min-h-screen p-4 md:p-8">
+<body class="min-h-screen">
 
-    <!-- Header -->
-    <nav class="max-w-6xl mx-auto mb-10 flex flex-wrap justify-between items-center gap-4 animate__animated animate__fadeInDown">
-        <div class="flex items-center gap-4 cursor-pointer" onclick="goHome()">
-            <div class="w-14 h-14 bg-slate-900 rounded-2xl flex items-center justify-center text-white text-2xl font-black">TM</div>
-            <div>
-                <h1 class="text-2xl font-black italic">TRILING <span class="text-blue-600">MELAYA</span></h1>
-                <div class="flex items-center gap-2 mt-1">
-                    <span id="user-level" class="level-badge text-[9px]">LVL 1</span>
-                    <span class="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400">Infinity 6-Categories Edition</span>
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 p-4">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3" onclick="goHome()">
+                <div class="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center text-white font-black text-xl">TM</div>
+                <div>
+                    <h1 class="text-lg font-black italic leading-none">TRILING <span class="text-blue-600">MELAYA</span></h1>
+                    <p class="text-[8px] font-bold text-slate-400 tracking-widest mt-1">ALL-PLATFORM READY</p>
                 </div>
             </div>
-        </div>
-        
-        <div class="flex items-center gap-4 bg-white p-2 pl-5 rounded-2xl shadow-sm border border-slate-100">
-            <div class="text-right">
-                <p id="exp-display" class="text-lg font-black text-blue-700">0 EXP</p>
+            <div id="exp-badge" class="bg-blue-600 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg shadow-blue-200">
+                0 EXP
             </div>
-            <button onclick="goHome()" class="bg-slate-900 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-blue-600 transition-all">UTAMA</button>
         </div>
     </nav>
 
-    <main class="max-w-6xl mx-auto">
-        <!-- Category Screen -->
-        <div id="category-screen" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate__animated animate__fadeIn"></div>
+    <main class="p-4 md:p-8 max-w-6xl mx-auto">
+        
+        <!-- Category Selection -->
+        <div id="category-screen" class="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 animate__animated animate__fadeIn">
+            <!-- Categories will be injected here -->
+        </div>
 
-        <!-- Quiz Screen -->
-        <div id="quiz-screen" class="hidden">
-            <div class="max-w-3xl mx-auto bg-white rounded-[3.5rem] p-8 md:p-14 shadow-xl border border-slate-100">
-                <div class="flex items-center gap-4 mb-10">
-                    <div class="flex-1 h-3 bg-slate-100 rounded-full overflow-hidden">
-                        <div id="quiz-progress" class="progress-bar h-full bg-blue-600" style="width: 0%"></div>
+        <!-- Quiz Interface -->
+        <div id="quiz-screen" class="hidden max-w-3xl mx-auto animate__animated animate__fadeIn">
+            <div class="bg-white rounded-[2.5rem] p-6 md:p-12 shadow-xl shadow-slate-200/50 border border-slate-100">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div id="quiz-progress" class="h-full bg-blue-600 transition-all duration-500" style="width: 0%"></div>
                     </div>
-                    <span id="quiz-counter" class="font-bold text-slate-400 text-sm">0/50</span>
+                    <span id="quiz-counter" class="text-xs font-black text-slate-400">0/50</span>
                 </div>
 
                 <div class="text-center">
-                    <span id="mode-label" class="inline-block mb-6 px-5 py-1 bg-blue-50 text-blue-600 rounded-full text-[10px] font-black tracking-widest uppercase border border-blue-100">LOADING</span>
+                    <span id="mode-label" class="inline-block px-4 py-1 bg-slate-100 text-slate-500 rounded-full text-[9px] font-black tracking-widest uppercase mb-6">MODE</span>
                     
-                    <div class="min-h-[250px] flex flex-col items-center justify-center gap-8">
-                        <h2 id="display-word" class="animate__animated animate__fadeIn">...</h2>
-                        
-                        <button onclick="speakCurrent()" class="w-16 h-16 bg-slate-50 text-slate-400 rounded-2xl flex items-center justify-center hover:text-blue-600 hover:bg-blue-50 transition-all active:scale-90">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
+                    <div class="min-h-[180px] md:min-h-[220px] flex flex-col items-center justify-center gap-6">
+                        <h2 id="display-word" class="animate__animated">...</h2>
+                        <button onclick="speakCurrent()" class="p-4 bg-slate-50 rounded-2xl text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
                         </button>
                     </div>
 
-                    <div id="options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-10"></div>
+                    <div id="options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 mt-8"></div>
                     
-                    <div id="writing-container" class="hidden mt-10 max-w-md mx-auto">
-                        <input type="text" id="write-input" autocomplete="off" placeholder="Tulis di sini..." class="w-full p-6 text-2xl font-bold text-center bg-slate-50 border-2 border-slate-200 rounded-3xl focus:border-blue-500 outline-none transition-all">
-                        <button onclick="checkWriting()" class="w-full mt-4 py-5 bg-slate-900 text-white rounded-2xl font-bold text-xl shadow-lg hover:bg-blue-700 transition-all">SAHKAN (ยืนยัน)</button>
+                    <div id="writing-container" class="hidden mt-8">
+                        <input type="text" id="write-input" autocomplete="off" placeholder="Tulis di sini..." 
+                            class="w-full p-5 text-xl font-bold text-center bg-slate-50 border-2 border-slate-100 rounded-3xl focus:border-blue-500 outline-none transition-all">
+                        <button onclick="checkWriting()" class="w-full mt-4 py-5 bg-slate-900 text-white rounded-3xl font-bold shadow-lg active:scale-95 transition-transform">SEMAK (ตรวจสอบ)</button>
                     </div>
                 </div>
             </div>
+            <button onclick="goHome()" class="w-full mt-6 text-slate-400 font-bold text-sm hover:text-rose-500 transition-colors">KEMBALI KE MENU (กลับเมนูหลัก)</button>
         </div>
 
         <!-- Result Screen -->
-        <div id="result-screen" class="hidden animate__animated animate__zoomIn">
-            <div class="max-w-4xl mx-auto bg-white rounded-[3.5rem] p-10 shadow-xl text-center">
-                <h2 class="text-4xl font-black mb-10">PRESTASI ANDA (ผลการทดสอบ)</h2>
-                <div class="grid grid-cols-3 gap-4 mb-10">
-                    <div class="p-6 bg-slate-50 rounded-3xl">
-                        <p class="text-xs font-bold text-slate-400 uppercase">Accuracy</p>
-                        <h3 id="res-acc" class="text-3xl font-black text-blue-600">0%</h3>
+        <div id="result-screen" class="hidden text-center animate__animated animate__zoomIn">
+            <div class="bg-white rounded-[3rem] p-10 shadow-2xl max-w-md mx-auto">
+                <div class="text-6xl mb-6">🏆</div>
+                <h2 class="text-3xl font-black mb-2">TAHNIAH!</h2>
+                <p class="text-slate-400 text-sm mb-8">คุณทำภารกิจสำเร็จแล้ว</p>
+                <div class="grid grid-cols-2 gap-4 mb-8">
+                    <div class="bg-slate-50 p-4 rounded-2xl">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase">Score</p>
+                        <p id="final-score" class="text-2xl font-black">0/50</p>
                     </div>
-                    <div class="p-6 bg-slate-50 rounded-3xl">
-                        <p class="text-xs font-bold text-slate-400 uppercase">Score</p>
-                        <h3 id="res-score" class="text-3xl font-black text-slate-900">0/50</h3>
-                    </div>
-                    <div class="p-6 bg-slate-50 rounded-3xl">
-                        <p class="text-xs font-bold text-slate-400 uppercase">Time</p>
-                        <h3 id="res-time" class="text-3xl font-black text-slate-900">0s</h3>
+                    <div class="bg-slate-50 p-4 rounded-2xl">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase">Accuracy</p>
+                        <p id="final-acc" class="text-2xl font-black text-blue-600">0%</p>
                     </div>
                 </div>
-                <div class="flex gap-4">
-                    <button onclick="goHome()" class="flex-1 py-5 bg-slate-100 text-slate-500 font-bold rounded-2xl">KEMBALI</button>
-                    <button onclick="startSession(state.activeCat)" class="flex-[2] py-5 bg-blue-600 text-white font-bold rounded-2xl shadow-lg">CUBA LAGI</button>
-                </div>
+                <button onclick="goHome()" class="w-full py-5 bg-blue-600 text-white rounded-3xl font-bold shadow-lg shadow-blue-200">MAIN LAGI (เล่นอีกครั้ง)</button>
             </div>
         </div>
+
     </main>
 
     <script>
@@ -154,105 +153,87 @@
                 { en: 'Civilization', th: 'อารยธรรม', yawi: 'تـمـدون', malay: 'Tamadun' },
                 { en: 'Sovereignty', th: 'อธิปไตย', yawi: 'كـدولاتـن', malay: 'Kedaulatan' },
                 { en: 'Philosophy', th: 'ปรัชญา', yawi: 'فـلـسـفـه', malay: 'Falsafah' },
-                { en: 'Prosperity', th: 'ความมั่งคั่ง', yawi: 'كـمـعـมـورن', malay: 'Kemakmuran' },
-                { en: 'Justice', th: 'ความยุติธรรม', yawi: 'كـعديـلـن', malay: 'Keadilan' },
-                { en: 'Wisdom', th: 'ปัญญา', yawi: 'كـبـيـجـقـسـأن', malay: 'Kebijaksanaan' },
-                { en: 'Integrity', th: 'ความซื่อตรง', yawi: 'إيـنـتـيـݢـريـتـي', malay: 'Integriti' },
-                { en: 'Unity', th: 'ความสามัคคี', yawi: 'فـرفـادوان', malay: 'Perpaduan' }
+                { en: 'Wisdom', th: 'ปัญญา', yawi: 'كـبـيـجـقـسـأن', malay: 'Kebijaksanaan' }
             ],
             daily: [
                 { en: 'Communication', th: 'การสื่อสาร', yawi: 'كـومـونـيـكـاسـي', malay: 'Komunikasi' },
                 { en: 'Responsibility', th: 'ความรับผิดชอบ', yawi: 'تـڠـݢـوڠـجـواب', malay: 'Tanggungjawab' },
-                { en: 'Health', th: 'สุขภาพ', yawi: 'كـصـيـحـตـن', malay: 'Kesihatan' },
-                { en: 'Knowledge', th: 'ความรู้', yawi: 'عـلـمـو', malay: 'Ilmu' },
-                { en: 'Education', th: 'การศึกษา', yawi: 'فـنـديـديـقـن', malay: 'Pendidikan' },
-                { en: 'Community', th: 'ชุมชน', yawi: 'مـشـاركـت', malay: 'Masyarakat' }
+                { en: 'Knowledge', th: 'ความรู้', yawi: 'عـلـمـو', malay: 'Ilmu' }
             ],
             heritage: [
-                { en: 'Literature', th: 'วรรณคดี', yawi: 'سـاسـตـرا', malay: 'Sastera' },
-                { en: 'Tradition', th: 'ประเพณี', yawi: 'عـادة رسـم', malay: 'Adat resam' },
                 { en: 'Culture', th: 'วัฒนธรรม', yawi: 'بـودايـا', malay: 'Budaya' },
                 { en: 'History', th: 'ประวัติศาสตร์', yawi: 'سـجـاره', malay: 'Sejarah' },
-                { en: 'Architecture', th: 'สถาปัตยกรรม', yawi: 'سـني بـيـنا', malay: 'Seni bina' },
-                { en: 'Manuscript', th: 'ต้นฉบับโบราณ', yawi: 'مـانـوسـكـريـف', malay: 'Manuskrip' }
+                { en: 'Tradition', th: 'ประเพณี', yawi: 'عـادة رسـم', malay: 'Adat resam' }
             ],
             travel: [
-                { en: 'Destination', th: 'จุดหมายปลายทาง', yawi: 'ديـسـتـيـنـاسـي', malay: 'Destinasi' },
-                { en: 'Journey', th: 'การเดินทาง', yawi: 'فـرجلانـن', malay: 'Perjalanan' },
-                { en: 'Navigation', th: 'การนำทาง', yawi: 'نـاويـݢـاسـي', malay: 'Navigasi' },
-                { en: 'Geography', th: 'ภูมิศาสตร์', yawi: 'ݢـيـوݢـرافي', malay: 'Geografi' },
-                { en: 'Exploration', th: 'การสำรวจ', yawi: 'فـڠـكـاجـيـن', malay: 'Pengkajian' },
-                { en: 'Adventure', th: 'การผจญภัย', yawi: 'فـڠـمـبـارأن', malay: 'Pengembaraan' }
+                { en: 'Destination', th: 'จุดหมาย', yawi: 'ديـسـتـيـنـاسـي', malay: 'Destinasi' },
+                { en: 'Journey', th: 'การเดินทาง', yawi: 'فـرجلانـن', malay: 'Perjalanan' }
             ],
             science: [
-                { en: 'Evolution', th: 'วิวัฒนาการ', yawi: 'ايـوولـوسـي', malay: 'Evolusi' },
-                { en: 'Discovery', th: 'การค้นพบ', yawi: 'فـنـمـوان', malay: 'Penemuan' },
-                { en: 'Hypothesis', th: 'สมมติฐาน', yawi: 'هـيـفـوتـيـسـيـس', malay: 'Hipotesis' },
                 { en: 'Technology', th: 'เทคโนโลยี', yawi: 'تـيـكـنـولـوݢـي', malay: 'Teknologi' },
-                { en: 'Experiment', th: 'การทดลอง', yawi: 'ايـكـسـفـريـمـن', malay: 'Eksperimen' },
-                { en: 'Analysis', th: 'การวิเคราะห์', yawi: 'انـالـيـسـيـس', malay: 'Analisis' }
+                { en: 'Analysis', th: 'การวิเคราะห์', yawi: 'انـالـيـسـيـส', malay: 'Analisis' }
             ],
             academic: [
-                { en: 'Perspective', th: 'มุมมอง', yawi: 'فـرسـفـيـكـتـيـف', malay: 'Perspektif' },
                 { en: 'Innovation', th: 'นวัตกรรม', yawi: 'ايـنـوواسي', malay: 'Inovasi' },
-                { en: 'Sustainability', th: 'ความยั่งยืน', yawi: 'كـلـسـตـاريـن', malay: 'Kelestarian' },
-                { en: 'Definition', th: 'นิยาม', yawi: 'تـعـريـف', malay: 'Takrif' },
-                { en: 'Substantial', th: 'สำคัญ/มาก', yawi: 'بـسـر', malay: 'Besar' },
-                { en: 'Diversity', th: 'ความหลากหลาย', yawi: 'كـفـلـبـاݢـايـن', malay: 'Kepelbagaian' }
+                { en: 'Diversity', th: 'ความหลากหลาย', yawi: 'كـفـلـبـاݢـايـน', malay: 'Kepelbagaian' }
             ]
         };
 
         const CATEGORIES = [
-            { id: 'mastery', name: 'Mastery Core', icon: '💎', desc: 'แก่นความรู้ระดับสูง' },
-            { id: 'daily', name: 'Daily Life', icon: '🌿', desc: 'ชีวิตประจำวัน' },
-            { id: 'heritage', name: 'Melayu Heritage', icon: '🕌', desc: 'มรดกและวัฒนธรรม' },
-            { id: 'travel', name: 'Exploration', icon: '🧭', desc: 'การสำรวจโลก' },
-            { id: 'science', name: 'Science Logic', icon: '🧪', desc: 'ตรรกะวิทยาศาสตร์' },
-            { id: 'academic', name: 'Academic Prof.', icon: '📜', desc: 'ระดับวิชาการ' }
+            { id: 'mastery', name: 'Mastery', icon: '💎' },
+            { id: 'daily', name: 'Daily', icon: '🌿' },
+            { id: 'heritage', name: 'Heritage', icon: '🕌' },
+            { id: 'travel', name: 'Travel', icon: '🧭' },
+            { id: 'science', name: 'Science', icon: '🧪' },
+            { id: 'academic', name: 'Academic', icon: '📜' }
         ];
 
         let state = {
-            activeCat: null, questions: [], idx: 0, score: 0, exp: parseInt(localStorage.getItem('tm_exp_v7') || '0'), logs: [], currAudio: {}
+            activeCat: null, questions: [], idx: 0, score: 0, 
+            exp: parseInt(localStorage.getItem('tm_exp_v8') || '0'), 
+            currAudio: {}
         };
 
         function init() {
             renderMenu();
-            updateStats();
-            document.addEventListener('keydown', e => {
-                if (e.key === 'Enter' && !document.getElementById('writing-container').classList.contains('hidden')) checkWriting();
+            updateExp();
+            // รองรับปุ่ม Enter ในช่องพิมพ์
+            document.getElementById('write-input').addEventListener('keypress', e => {
+                if(e.key === 'Enter') checkWriting();
             });
         }
 
         function renderMenu() {
             const container = document.getElementById('category-screen');
             container.innerHTML = CATEGORIES.map(c => `
-                <div onclick="startSession('${c.id}')" class="card-infinite p-8 cursor-pointer group text-center">
-                    <div class="text-5xl mb-4 group-hover:scale-110 transition-transform">${c.icon}</div>
-                    <h3 class="text-xl font-bold text-slate-800">${c.name}</h3>
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">${c.desc}</p>
+                <div onclick="startQuiz('${c.id}')" class="card-category p-6 md:p-10 text-center">
+                    <div class="text-4xl md:text-5xl mb-4">${c.icon}</div>
+                    <h3 class="font-bold text-slate-800 text-sm md:text-lg">${c.name}</h3>
+                    <p class="text-[9px] text-slate-400 font-bold uppercase mt-2 tracking-tighter">MULA BELAJAR</p>
                 </div>
             `).join('');
+            document.getElementById('category-screen').classList.remove('hidden');
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.add('hidden');
         }
 
-        function updateStats() {
-            document.getElementById('exp-display').innerText = `${state.exp.toLocaleString()} EXP`;
-            document.getElementById('user-level').innerText = `LVL ${Math.floor(state.exp / 1000) + 1}`;
+        function updateExp() {
+            document.getElementById('exp-badge').innerText = `${state.exp} EXP`;
         }
 
         function goHome() {
-            document.getElementById('quiz-screen').classList.add('hidden');
-            document.getElementById('result-screen').classList.add('hidden');
-            document.getElementById('category-screen').classList.remove('hidden');
             window.speechSynthesis.cancel();
+            renderMenu();
         }
 
-        function startSession(catId) {
+        function startQuiz(catId) {
             state.activeCat = catId;
-            state.idx = 0; state.score = 0; state.logs = [];
+            state.idx = 0;
+            state.score = 0;
             const pool = MASTER_POOL[catId];
             state.questions = Array.from({length: 50}, () => {
                 const item = pool[Math.floor(Math.random() * pool.length)];
-                return { ...item, qType: Math.random() > 0.4 ? 'choice' : 'write' };
+                return { ...item, type: Math.random() > 0.4 ? 'choice' : 'write' };
             });
             document.getElementById('category-screen').classList.add('hidden');
             document.getElementById('quiz-screen').classList.remove('hidden');
@@ -261,37 +242,45 @@
 
         function nextQuestion() {
             if (state.idx >= 50) return showResult();
+            
             const q = state.questions[state.idx];
             const modes = [
-                { f: 'en', t: 'yawi', l: 'en-US', label: 'English → Jawi' },
-                { f: 'th', t: 'malay', l: 'th-TH', label: 'Thai → Rumi' },
-                { f: 'yawi', t: 'th', l: 'id-ID', label: 'Jawi → Thai' },
-                { f: 'malay', t: 'en', l: 'id-ID', label: 'Rumi → English' }
+                { f: 'en', t: 'yawi', l: 'en-US', label: 'English to Jawi' },
+                { f: 'th', t: 'malay', l: 'th-TH', label: 'Thai to Rumi' },
+                { f: 'yawi', t: 'th', l: 'id-ID', label: 'Jawi to Thai' },
+                { f: 'malay', t: 'en', l: 'id-ID', label: 'Rumi to English' }
             ];
-            const mode = modes[Math.floor(Math.random() * modes.length)];
-            document.getElementById('quiz-progress').style.width = `${((state.idx + 1) / 50) * 100}%`;
+            const m = modes[Math.floor(Math.random() * modes.length)];
+            
+            document.getElementById('quiz-progress').style.width = `${((state.idx + 1)/50)*100}%`;
             document.getElementById('quiz-counter').innerText = `${state.idx + 1}/50`;
-            document.getElementById('mode-label').innerText = mode.label;
+            document.getElementById('mode-label').innerText = m.label;
+            
             const display = document.getElementById('display-word');
-            display.innerText = q[mode.f];
-            display.className = mode.f === 'yawi' ? 'yawi-text' : 'text-5xl md:text-6xl font-black text-slate-800 thai-font';
-            state.startTime = Date.now();
-            state.currAudio = { text: mode.f === 'yawi' ? q.malay : q[mode.f], lang: mode.l };
-            speakCurrent();
-            if (q.qType === 'choice') renderChoices(q, mode.t);
-            else renderWriting();
+            display.innerText = q[m.f];
+            display.className = m.f === 'yawi' ? 'yawi-text animate__animated animate__fadeIn' : 'text-4xl md:text-6xl font-black text-slate-800 animate__animated animate__fadeIn';
+
+            state.currAudio = { text: m.f === 'yawi' ? q.malay : q[m.f], lang: m.l };
+            
+            if (q.type === 'choice') {
+                renderChoices(q, m.t);
+            } else {
+                renderWriting();
+            }
         }
 
         function renderChoices(q, target) {
             const container = document.getElementById('options-container');
             container.classList.remove('hidden');
             document.getElementById('writing-container').classList.add('hidden');
+            
             const correct = q[target];
-            const allOfTarget = Object.values(MASTER_POOL).flat().map(i => i[target]).filter(i => i && i !== correct);
-            const choices = [correct, ...allOfTarget.sort(() => 0.5 - Math.random()).slice(0, 3)].sort(() => 0.5 - Math.random());
+            const others = Object.values(MASTER_POOL).flat().map(i => i[target]).filter(i => i !== correct);
+            const choices = [correct, ...others.sort(() => 0.5 - Math.random()).slice(0, 3)].sort(() => 0.5 - Math.random());
+
             container.innerHTML = choices.map(c => `
-                <button onclick="handleAnswer('${c.replace(/'/g, "\\'")}', '${correct.replace(/'/g, "\\'")}')" 
-                    class="btn-choice p-6 bg-white rounded-3xl font-bold text-slate-700 shadow-sm ${target === 'yawi' ? 'yawi-text text-3xl py-2' : ''}">
+                <button onclick="submitAnswer('${c.replace(/'/g, "\\'")}', '${correct.replace(/'/g, "\\'")}')" 
+                    class="btn-choice p-5 bg-white rounded-2xl border-2 border-slate-50 font-bold text-slate-700 shadow-sm text-sm md:text-base ${target === 'yawi' ? 'yawi-text !text-2xl py-2' : ''}">
                     ${c}
                 </button>
             `).join('');
@@ -302,48 +291,55 @@
             document.getElementById('writing-container').classList.remove('hidden');
             const input = document.getElementById('write-input');
             input.value = '';
-            setTimeout(() => input.focus(), 100);
+            setTimeout(() => input.focus(), 200);
         }
 
-        function handleAnswer(given, expected) {
-            const isOk = given.toLowerCase().trim() === expected.toLowerCase().trim();
-            if (isOk) { state.score++; state.exp += 30; showFeedback('MANTAP!', 'bg-emerald-500'); }
-            else { showFeedback(`SALAH → ${expected}`, 'bg-rose-500'); }
-            state.logs.push({ ok: isOk, t: (Date.now() - state.startTime)/1000 });
+        function submitAnswer(given, expected) {
+            const isCorrect = given.toLowerCase().trim() === expected.toLowerCase().trim();
+            if (isCorrect) {
+                state.score++;
+                state.exp += 20;
+                feedback("BETUL! (ถูกต้อง)", "bg-emerald-500");
+            } else {
+                feedback(`SALAH! (ผิด) → ${expected}`, "bg-rose-500");
+            }
+            
             state.idx++;
-            localStorage.setItem('tm_exp_v7', state.exp);
-            updateStats();
-            setTimeout(nextQuestion, 800);
+            state.exp += 5;
+            localStorage.setItem('tm_exp_v8', state.exp);
+            updateExp();
+            setTimeout(nextQuestion, 600);
         }
 
         function checkWriting() {
             const q = state.questions[state.idx];
             const val = document.getElementById('write-input').value.trim();
-            const isOk = [q.en, q.th, q.yawi, q.malay].some(a => a && a.toLowerCase() === val.toLowerCase());
-            handleAnswer(val, isOk ? val : q.malay);
+            const correctOnes = [q.en, q.th, q.yawi, q.malay];
+            const isCorrect = correctOnes.some(c => c && c.toLowerCase() === val.toLowerCase());
+            submitAnswer(val, isCorrect ? val : q.malay);
+        }
+
+        function feedback(msg, color) {
+            const el = document.createElement('div');
+            el.className = `fixed top-20 left-1/2 -translate-x-1/2 ${color} text-white px-8 py-3 rounded-full font-black z-[100] animate__animated animate__bounceIn`;
+            el.innerText = msg;
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 1000);
         }
 
         function speakCurrent() {
             window.speechSynthesis.cancel();
             const u = new SpeechSynthesisUtterance(state.currAudio.text);
             u.lang = state.currAudio.lang;
+            u.rate = 0.9;
             window.speechSynthesis.speak(u);
-        }
-
-        function showFeedback(txt, color) {
-            const fb = document.createElement('div');
-            fb.className = `fixed top-10 left-1/2 -translate-x-1/2 ${color} text-white px-8 py-3 rounded-2xl font-black shadow-xl z-50 animate__animated animate__fadeInDown`;
-            fb.innerText = txt;
-            document.body.appendChild(fb);
-            setTimeout(() => { fb.remove(); }, 1000);
         }
 
         function showResult() {
             document.getElementById('quiz-screen').classList.add('hidden');
             document.getElementById('result-screen').classList.remove('hidden');
-            document.getElementById('res-acc').innerText = Math.round((state.score/50)*100) + '%';
-            document.getElementById('res-score').innerText = `${state.score}/50`;
-            document.getElementById('res-time').innerText = (state.logs.reduce((s,l)=>s+l.t,0)/50).toFixed(1) + 's';
+            document.getElementById('final-score').innerText = `${state.score}/50`;
+            document.getElementById('final-acc').innerText = Math.round((state.score/50)*100) + '%';
         }
 
         window.onload = init;
